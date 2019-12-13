@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { connect } from 'react-redux';
+
+import commentReducer from './reducers/commentReducer';
+import { callApi } from './actions/index';
+
+import Main from './components/Main'
+
+class App extends React.Component {
+
+  renderMainRedirect = () => {
+    return <Main />
+  }
+
+  render() {
+    return (
+      <div>
+        {this.renderMainRedirect()}
+      </div>
+    )
+  }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    propsToCallApi: (data) => {
+      return dispatch(callApi(data)) // this function will come from action file
+    }
+  };
+}
+App = connect(
+  (state, action) => (
+    commentReducer(state, action)),
+  mapDispatchToProps,
+)(App);
+
 
 export default App;
