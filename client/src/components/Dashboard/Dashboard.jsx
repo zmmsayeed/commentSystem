@@ -15,7 +15,7 @@ class Dashboard extends Component {
                         </div>
                         <div className="col-3 col-md-3">
                             <div className="rightDiv">
-                                <button type="submit" className="btn-warning">Post</button>
+                                <button type="submit" className="btn btn-warning">Post</button>
                             </div>
                         </div>
                     </div>
@@ -48,13 +48,11 @@ class Dashboard extends Component {
                                         <div class="comment-content">
                                             <div class="commenter-head"><span class="commenter-name"><a href="" >rafazameri@gmail.com</a></span> <span class="comment-date"><i class="far fa-clock"></i>2 days ago</span></div>
                                             <div class="comment-body">
-                                                <span class="comment">This is comment content Here is nice comment</span>
+                                                <span class="comment">This is comment content Here is nice comment Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque aliquam quibusdam veniam eaque laboriosam, hic vel consequatur harum excepturi molestias a debitis saepe veritatis error rem unde enim corrupti? Earum. lorem</span>
                                             </div>
                                             <div class="comment-footer">
                                                 <span class="comment-likes"><a href="" class="comment-action active"> <i class="fas fa-reply"></i> Reply</a></span> <span class="comment-reply"><a href="" class="comment-action"><i class="fas fa-edit"></i> Edit </a></span>
                                             </div>
-
-
                                         </div>
 
                                     </div>
@@ -67,13 +65,11 @@ class Dashboard extends Component {
                                 <div class="comment-content">
                                     <div class="commenter-head"><span class="commenter-name"><a href="" >iamvrl@gmail.com</a></span> <span class="comment-date"><i class="far fa-clock"></i>2 days ago</span></div>
                                     <div class="comment-body">
-                                        <span class="comment">This is comment content Here is nice comment</span>
+                                        <span class="comment">This is comment content Here is nice comment Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis magni architecto veritatis laborum porro a magnam at ipsum hic, cumque quo aut quos non sed odit quas nemo ipsam voluptas?</span>
                                     </div>
                                     <div class="comment-footer">
                                         <span class="comment-likes"><a href="" class="comment-action active"> <i class="fas fa-reply"></i> Reply</a></span> <span class="comment-reply"><a href="" class="comment-action"><i class="fas fa-edit"></i> Edit </a></span>
                                     </div>
-
-
                                 </div>
 
                             </div>
