@@ -2,15 +2,14 @@ const commentReducer = (state = {}, action) => {
 
     const newState = { ...state };
     switch (action.type) {
-        case 'YOUR_ACTION_KEY_TO_TRIGGER_SAGA_API':
+        case 'REGISTER_USER_TRIGGER':
             return { ...newState, loading: true, isFetched: false }
-            break
-        case 'YOUR_ACTION_KEY_WHICH_WIIL_BE_TRIGGERED_BY_SAGA':
-            return { ...newState, loading: false, isFetched: true, response: action.response, action: action.type }
-            break
+
+        case 'REGISTER_USER_RESPONSE':
+            return { ...newState, loading: false, isFetched: true, response: action.json, action: action.type }
+
         default:
             return newState
-            break
     }
 };
 

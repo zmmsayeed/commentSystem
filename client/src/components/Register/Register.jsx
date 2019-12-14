@@ -4,22 +4,46 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 
 import commentReducer from '../../reducers/commentReducer';
-// import { callApi } from '../../actions/index';
+import { registerUserTrigger } from '../../actions/index';
 
 import { Form, Field } from 'react-final-form';
 import validate from './validation'
 
-import './SignIn.css';
+import './Register.css';
 
-class SignIn extends React.Component {
+class Register extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            error: ""
+        }
+    }
 
-        console.log(props)
+    componentWillReceiveProps(props) {
+        if (props.commentReducer.isFetched) {
+            switch (props.commentReducer.action) {
+                case 'REGISTER_USER_RESPONSE':
+                    if (props.commentReducer.response.success) {
+                        this.props.history.push('/signIn')
+                    }
+                    else {
+                        this.setState({ error: props.commentReducer.response.message })
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     handleSubmit = (values) => {
         console.log(values)
+        this.props.registerUserTrigger({
+            email: values.email,
+            password: values.password,
+            confirmPassword: values.password
+        })
     }
 
     render() {
@@ -35,8 +59,10 @@ class SignIn extends React.Component {
                                 <form onSubmit={handleSubmit}>
                                     <div className="text-center">
                                         <img className="mb-4" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" alt="" width="72" height="72" />
-                                        <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+                                        <h1 className="h3 mb-3 font-weight-normal">User Registration</h1>
                                     </div>
+
+                                    <p>{this.state.error}</p>
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email address</label>
@@ -84,11 +110,34 @@ class SignIn extends React.Component {
                                             }}
                                         </Field>
                                     </div>
-                                    <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                                    <div className="form-group">
+                                        <label htmlFor="password">Confirm Password</label>
+                                        <Field
+                                            name="confirmPassword"
+                                            placeholder='Enter your password again'
+                                        >
+                                            {({ input, meta, placeholder }) => {
+                                                let showToolTip = false
+                                                if (meta.error && meta.visited && !meta.active) {
+                                                    showToolTip = true
+                                                }
+                                                else {
+                                                    showToolTip = false
+                                                }
+                                                return (
+                                                    <>
+                                                        <input {...input} type="password" placeholder={placeholder} className="form-control" />
+                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                    </>
+                                                )
+                                            }}
+                                        </Field>
+                                    </div>
+                                    <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
                                     <div className="text-center">
                                         <p className="mb-5 mt-5">
-                                            Not User?
-                                            <Link to="/register"> Register.</Link>
+                                            Already a User?
+                                            <Link to="/singIn"> Sign In.</Link>
                                         </p>
                                         <p className="mt-5 mb-3 text-muted">&copy; 2019-2020</p>
                                     </div>
@@ -104,16 +153,16 @@ class SignIn extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        // propsToCallApi: (data) => {
-        //     return dispatch(callApi(data)) // this function will come from action file
-        // }
+        registerUserTrigger: (data) => {
+            return dispatch(registerUserTrigger(data))
+        }
     };
 }
-SignIn = connect(
+Register = connect(
     (state, action) => (
         commentReducer(state, action)),
     mapDispatchToProps,
-)(SignIn);
+)(Register);
 
 
-export default SignIn;
+export default Register;

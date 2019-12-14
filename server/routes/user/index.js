@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     console.log(req.query)
     try {
         let user = await db.getDb().collection('users').findOne({ email: req.query.email })
-        if(user) {
+        if (user) {
             res.send({
                 status: 200,
                 message: "User found",
@@ -32,6 +32,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    console.log("BODY", req.body)
     try {
 
         let foundUser = await db.getDb().collection('users').findOne({ email: req.body.email })

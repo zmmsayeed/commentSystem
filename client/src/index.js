@@ -14,6 +14,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
 import storage from 'redux-persist/lib/storage'
 
+import { logger } from 'redux-logger'
+
 import rootReducer from './reducers/index';
 import rootSaga from './sagas/index';
 
@@ -31,10 +33,22 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 const sagaMiddleware = createSagaMiddleware();
 
+let middleware = [sagaMiddleware]
+
+console.log(process.env.NODE_ENV)
+
+if (process.env.NODE_ENV === "development") {
+    middleware = [...middleware, logger]
+}
 export const store = createStore(
     persistedReducer,
-    applyMiddleware(sagaMiddleware),
+    applyMiddleware(...middleware),
 )
+
+// export const store = createStore(
+//     persistedReducer,
+//     applyMiddleware(sagaMiddleware),
+// )
 
 export const persistor = persistStore(store)
 persistor.persist()

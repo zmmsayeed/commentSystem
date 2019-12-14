@@ -1,5 +1,11 @@
-export const callApi = (data) => {
+export const registerUserTrigger = (data) => {
     return ({
-        type: 'YOUR_ACTION_KEY_TO_TRIGGER_SAGA_API', data
+        type: 'REGISTER_USER_TRIGGER', data
+    })
+};
+
+export const registerUserResponse = (data) => {
+    return ({
+        type: 'REGISTER_USER_RESPONSE', data
     })
 };
