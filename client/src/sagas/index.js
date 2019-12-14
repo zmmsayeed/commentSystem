@@ -14,12 +14,24 @@ function* registerUser(data) {
     yield put({ type: "REGISTER_USER_RESPONSE", json: json || [{ error: json }] });
 }
 
+function* signinUser(data) {
+    const json = yield fetch('http://localhost:3001/user?email=' + data.data.email, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json());
 
+    yield put({ type: "SIGNIN_RESPONSE", json: json || [{ error: json }] });
+}
 
 
 
 function* actionWatcher() {
     yield takeLatest('REGISTER_USER_TRIGGER', registerUser);
+    yield takeLatest('SIGNIN_TRIGGER', signinUser);
 }
 
 export default function* rootSaga() {

@@ -24,7 +24,7 @@ class Register extends React.Component {
             switch (props.commentReducer.action) {
                 case 'REGISTER_USER_RESPONSE':
                     if (props.commentReducer.response.success) {
-                        this.props.history.push('/signIn')
+                        this.props.history.push('/dashboard')
                     }
                     else {
                         this.setState({ error: props.commentReducer.response.message })

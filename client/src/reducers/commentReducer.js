@@ -6,6 +6,14 @@ const commentReducer = (state = {}, action) => {
             return { ...newState, loading: true, isFetched: false }
 
         case 'REGISTER_USER_RESPONSE':
+            newState.userLoggedIn = true;
+            return { ...newState, loading: false, isFetched: true, response: action.json, action: action.type }
+
+        case 'SIGNIN_TRIGGER':
+            return { ...newState, loading: true, isFetched: false }
+
+        case 'SIGNIN_RESPONSE':
+            newState.userLoggedIn = true;
             return { ...newState, loading: false, isFetched: true, response: action.json, action: action.type }
 
         default:

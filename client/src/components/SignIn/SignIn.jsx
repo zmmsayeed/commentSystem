@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 
 import commentReducer from '../../reducers/commentReducer';
-// import { callApi } from '../../actions/index';
+import { signinTrigger } from '../../actions/index';
 
 import { Form, Field } from 'react-final-form';
 import validate from './validation'
@@ -15,12 +15,32 @@ class SignIn extends React.Component {
     constructor(props) {
         super(props)
 
-        console.log(props)
+        this.state = {
+            error: ""
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.commentReducer.isFetched) {
+            switch (props.commentReducer.action) {
+                case 'SIGNIN_RESPONSE':
+                    if (props.commentReducer.response.success) {
+                        this.props.history.push('/dashboard')
+                    }
+                    else {
+                        this.setState({ error: props.commentReducer.response.message })
+                    }
+                    break;
+                default:
+                    break
+            }
+        }
     }
 
     handleSubmit = (values) => {
-        console.log(values)
+        this.props.signinTrigger({ email: values.email })
     }
+
 
     render() {
         return (
@@ -104,9 +124,9 @@ class SignIn extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        // propsToCallApi: (data) => {
-        //     return dispatch(callApi(data)) // this function will come from action file
-        // }
+        signinTrigger: (data) => {
+            return dispatch(signinTrigger(data))
+        }
     };
 }
 SignIn = connect(
