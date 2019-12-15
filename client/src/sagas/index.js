@@ -28,11 +28,68 @@ function* signinUser(data) {
     yield put({ type: "SIGNIN_RESPONSE", json: json || [{ error: json }] });
 }
 
+function* postPost(data) {
+    const json = yield fetch('http://localhost:3001/comment/post', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data.data),
+    })
+        .then(response => response.json());
 
+    yield put({ type: "POST_POST_RESPONSE", json: json || [{ error: json }] });
+}
+
+function* getPosts(data) {
+    const json = yield fetch('http://localhost:3001/comment/post', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json());
+
+    yield put({ type: "GET_POSTS_RESPONSE", json: json || [{ error: json }] });
+}
+
+function* editPost(data) {
+    const json = yield fetch('http://localhost:3001/comment/update', {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data.data),
+    })
+        .then(response => response.json());
+
+    yield put({ type: "EDIT_POST_RESPONSE", json: json || [{ error: json }] });
+}
+
+function* postComment(data) {
+    const json = yield fetch('http://localhost:3001/comment/comment', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data.data),
+    })
+        .then(response => response.json());
+
+    yield put({ type: "POST_COMMENT_RESPONSE", json: json || [{ error: json }] });
+}
 
 function* actionWatcher() {
     yield takeLatest('REGISTER_USER_TRIGGER', registerUser);
     yield takeLatest('SIGNIN_TRIGGER', signinUser);
+    yield takeLatest('POST_POST', postPost);
+    yield takeLatest('GET_POSTS', getPosts);
+    yield takeLatest('EDIT_POST_TRIGGER', editPost);
+    yield takeLatest('POST_COMMENT', postComment);
 }
 
 export default function* rootSaga() {

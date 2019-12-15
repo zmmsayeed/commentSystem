@@ -71,7 +71,7 @@ class Register extends React.Component {
                                         <h1 className="h3 mb-3 font-weight-normal">User Registration</h1>
                                     </div>
 
-                                    <p>{this.state.error}</p>
+                                    <p className="error">{this.state.error}</p>
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email address</label>

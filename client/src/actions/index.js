@@ -28,6 +28,42 @@ export const logoutTrigger = (data) => {
     })
 }
 
+export const postPost = (data) => {
+    return ({
+        type: 'POST_POST', data
+    })
+}
+
+export const postPostResponse = (data) => {
+    return ({
+        type: 'POST_POST_RESPONSE', data
+    })
+}
+
+export const getPosts = (data) => {
+    return ({
+        type: 'GET_POSTS', data
+    })
+}
+
+export const getPostsResponse = (data) => {
+    return ({
+        type: 'GET_POSTS_RESPONSE', data
+    })
+}
+
+export const editPostTrigger = (data) => {
+    return ({
+        type: 'EDIT_POST_TRIGGER', data
+    })
+}
+
+export const editPostResponse = (data) => {
+    return ({
+        type: 'EDIT_POST_RESPONSE', data
+    })
+}
+
 export const postComment = (data) => {
     return ({
         type: 'POST_COMMENT', data
@@ -39,3 +75,5 @@ export const postCommentResponse = (data) => {
         type: 'POST_COMMENT_RESPONSE', data
     })
 }
+
+
