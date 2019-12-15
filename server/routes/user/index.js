@@ -1,18 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../config/dbconfig');
-const uuid = require('uuid/v4')
+const uuid = require('uuid/v4');
+var bcrypt = require('bcryptjs');
 
-router.get('/', async (req, res) => {
-    console.log(req.query)
+router.post('/', async (req, res) => {
     try {
         let user = await db.getDb().collection('users').findOne({ email: req.query.email })
+
+
         if (user) {
-            res.send({
-                status: 200,
-                message: "User found",
-                success: true
-            })
+            let password = req.body.password;
+            let hash = user.password
+            bcrypt.compare(password, hash, function (err, result) {
+                if (result) {
+                    res.send({
+                        status: 200,
+                        message: "User found",
+                        success: true,
+                        data: user
+                    })
+                }
+                else {
+                    res.send({
+                        status: 500,
+                        message: "Username/Password is wrong",
+                        success: false,
+                        data: user
+                    })
+                }
+            });
         }
         else {
             res.send({
@@ -43,9 +60,18 @@ router.post('/register', async (req, res) => {
             })
         }
         else {
-            let data = req.body;
-            data._id = uuid()
-            let insertedData = await db.getDb().collection('users').insertOne(data)
+
+            let email = req.body.email;
+            let password = req.body.password;
+
+            let data = {
+                email: email,
+                password: password
+            }
+
+            data._id = uuid();
+            data.timestamp = Date.now();
+            let insertedData = await db.getDb().collection('users').insertOne(data);
 
             res.send({
                 status: 200,

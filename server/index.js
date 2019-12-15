@@ -12,6 +12,7 @@ const env = process.env.NODE_ENV || 'prod'
 
 //Routes file configuration
 const { userRoutes } = require('./routes/user/index');
+const { commentRoutes } = require('./routes/comments/index')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/user', userRoutes);
+app.use('/comment', commentRoutes)
 
 
 // Database Connection
@@ -31,6 +33,6 @@ db.connect((err) => {
         console.log('unable to connect to the database');
     } else {
         const port = process.env.port || 3001
-        app.listen(port, () => console.log(`database connection establised and server is running on ${port}`))
+        app.listen(port, () => console.log(`database connection established and server is running on ${port}`))
     }
 })

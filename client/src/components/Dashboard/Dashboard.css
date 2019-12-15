@@ -34,6 +34,10 @@
     justify-content: center;
 }
 
+.click {
+    cursor: pointer;
+}
+
 /* Comment Section Styling */
 .comment-box-wrapper{
     display:flex; 

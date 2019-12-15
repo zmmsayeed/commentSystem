@@ -1,11 +1,33 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+
+import commentReducer from '../../reducers/commentReducer';
+import { logoutTrigger } from '../../actions/index';
 
 import './Dashboard.css'
 
 class Dashboard extends Component {
+
+    // constructor(props) {
+    //     super(props);
+    // }
+
+    logOut = () => {
+        this.props.logoutTrigger()
+    }
+
     render() {
+        if (!this.props.commentReducer.userLoggedIn) {
+            this.props.history.push('/signIn')
+        }
         return (
             <div className="container mt-3">
+
+                <div className="row mt-2">
+                    <div className="col-12 col-md-12 text-right">
+                        <p className="click" onClick={this.logOut}>Log Out</p>
+                    </div>
+                </div>
 
                 {/* Post Box Code */}
                 <div className="postBox">
@@ -23,35 +45,35 @@ class Dashboard extends Component {
                 {/* Post Box Code */}
 
                 {/* Comment Section Code */}
-                <div class="row mt-3">
-                    <div class="col-md-12 col-12">
-                        <div class="comment-box-wrapper">
-                            <div class="comment-box">
-                                <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" class="commenter-image" alt="commenter_image" />
-                                <div class="comment-content">
-                                    <div class="commenter-head"><span class="commenter-name"><a href="" >zmmsayeed@gmail.com</a></span> <span class="comment-date"><i class="far fa-clock"></i>2 days ago</span></div>
-                                    <div class="comment-body">
-                                        <span class="comment">This is comment content Here is nice comment And you are beautiful Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid debitis veritatis, eveniet deserunt eligendi asperiores. Architecto odit voluptatem, quos beatae voluptates quae voluptate enim provident commodi eaque quaerat aut quo!</span>
+                <div className="row mt-3">
+                    <div className="col-md-12 col-12">
+                        <div className="comment-box-wrapper">
+                            <div className="comment-box">
+                                <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
+                                <div className="comment-content">
+                                    <div className="commenter-head"><span className="commenter-name"><a href="" >zmmsayeed@gmail.com</a></span> <span className="comment-date"><i className="far fa-clock"></i>2 days ago</span></div>
+                                    <div className="comment-body">
+                                        <span className="comment">This is comment content Here is nice comment And you are beautiful Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid debitis veritatis, eveniet deserunt eligendi asperiores. Architecto odit voluptatem, quos beatae voluptates quae voluptate enim provident commodi eaque quaerat aut quo!</span>
                                     </div>
-                                    <div class="comment-footer">
-                                        <span class="comment-likes"><a href="" class="comment-action active"> <i class="fas fa-reply"></i> Reply</a></span> <span class="comment-reply"><a href="" class="comment-action"><i class="fas fa-edit"></i> Edit </a></span>
+                                    <div className="comment-footer">
+                                        <span className="comment-likes"><a href="" className="comment-action active"> <i className="fas fa-reply"></i> Reply</a></span> <span className="comment-reply"><a href="" className="comment-action"><i className="fas fa-edit"></i> Edit </a></span>
                                     </div>
 
 
                                 </div>
                             </div>
-                            <div class="nested-comments">
+                            <div className="nested-comments">
 
-                                <div class="comment-box-wrapper">
-                                    <div class="comment-box">
-                                        <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" class="commenter-image" alt="commenter_image" />
-                                        <div class="comment-content">
-                                            <div class="commenter-head"><span class="commenter-name"><a href="" >rafazameri@gmail.com</a></span> <span class="comment-date"><i class="far fa-clock"></i>2 days ago</span></div>
-                                            <div class="comment-body">
-                                                <span class="comment">This is comment content Here is nice comment Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque aliquam quibusdam veniam eaque laboriosam, hic vel consequatur harum excepturi molestias a debitis saepe veritatis error rem unde enim corrupti? Earum. lorem</span>
+                                <div className="comment-box-wrapper">
+                                    <div className="comment-box">
+                                        <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
+                                        <div className="comment-content">
+                                            <div className="commenter-head"><span className="commenter-name"><a href="" >rafazameri@gmail.com</a></span> <span className="comment-date"><i className="far fa-clock"></i>2 days ago</span></div>
+                                            <div className="comment-body">
+                                                <span className="comment">This is comment content Here is nice comment Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque aliquam quibusdam veniam eaque laboriosam, hic vel consequatur harum excepturi molestias a debitis saepe veritatis error rem unde enim corrupti? Earum. lorem</span>
                                             </div>
-                                            <div class="comment-footer">
-                                                <span class="comment-likes"><a href="" class="comment-action active"> <i class="fas fa-reply"></i> Reply</a></span> <span class="comment-reply"><a href="" class="comment-action"><i class="fas fa-edit"></i> Edit </a></span>
+                                            <div className="comment-footer">
+                                                <span className="comment-likes"><a href="" className="comment-action active"> <i className="fas fa-reply"></i> Reply</a></span> <span className="comment-reply"><a href="" className="comment-action"><i className="fas fa-edit"></i> Edit </a></span>
                                             </div>
                                         </div>
 
@@ -59,16 +81,16 @@ class Dashboard extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="comment-box-wrapper">
-                            <div class="comment-box">
-                                <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" class="commenter-image" alt="commenter_image" />
-                                <div class="comment-content">
-                                    <div class="commenter-head"><span class="commenter-name"><a href="" >iamvrl@gmail.com</a></span> <span class="comment-date"><i class="far fa-clock"></i>2 days ago</span></div>
-                                    <div class="comment-body">
-                                        <span class="comment">This is comment content Here is nice comment Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis magni architecto veritatis laborum porro a magnam at ipsum hic, cumque quo aut quos non sed odit quas nemo ipsam voluptas?</span>
+                        <div className="comment-box-wrapper">
+                            <div className="comment-box">
+                                <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
+                                <div className="comment-content">
+                                    <div className="commenter-head"><span className="commenter-name"><a href="" >iamvrl@gmail.com</a></span> <span className="comment-date"><i className="far fa-clock"></i>2 days ago</span></div>
+                                    <div className="comment-body">
+                                        <span className="comment">This is comment content Here is nice comment Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis magni architecto veritatis laborum porro a magnam at ipsum hic, cumque quo aut quos non sed odit quas nemo ipsam voluptas?</span>
                                     </div>
-                                    <div class="comment-footer">
-                                        <span class="comment-likes"><a href="" class="comment-action active"> <i class="fas fa-reply"></i> Reply</a></span> <span class="comment-reply"><a href="" class="comment-action"><i class="fas fa-edit"></i> Edit </a></span>
+                                    <div className="comment-footer">
+                                        <span className="comment-likes"><a href="" className="comment-action active"> <i className="fas fa-reply"></i> Reply</a></span> <span className="comment-reply"><a href="" className="comment-action"><i className="fas fa-edit"></i> Edit </a></span>
                                     </div>
                                 </div>
 
@@ -80,5 +102,19 @@ class Dashboard extends Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logoutTrigger: (data) => {
+            return dispatch(logoutTrigger(data))
+        }
+    };
+}
+Dashboard = connect(
+    (state, action) => (
+        commentReducer(state, action)),
+    mapDispatchToProps,
+)(Dashboard);
+
 
 export default Dashboard;

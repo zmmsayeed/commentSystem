@@ -16,11 +16,12 @@ function* registerUser(data) {
 
 function* signinUser(data) {
     const json = yield fetch('http://localhost:3001/user?email=' + data.data.email, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify(data.data),
     })
         .then(response => response.json());
 

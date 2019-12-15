@@ -21,3 +21,21 @@ export const signinResponse = (data) => {
         type: 'SIGNIN_RESPONSE', data
     })
 };
+
+export const logoutTrigger = (data) => {
+    return ({
+        type: 'LOGOUT_TRIGGER', data
+    })
+}
+
+export const postComment = (data) => {
+    return ({
+        type: 'POST_COMMENT', data
+    })
+}
+
+export const postCommentResponse = (data) => {
+    return ({
+        type: 'POST_COMMENT_RESPONSE', data
+    })
+}

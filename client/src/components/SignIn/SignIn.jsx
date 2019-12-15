@@ -24,7 +24,7 @@ class SignIn extends React.Component {
         if (props.commentReducer.isFetched) {
             switch (props.commentReducer.action) {
                 case 'SIGNIN_RESPONSE':
-                    if (props.commentReducer.response.success) {
+                    if (props.commentReducer.response.success && props.commentReducer.userLoggedIn) {
                         this.props.history.push('/dashboard')
                     }
                     else {
@@ -38,7 +38,7 @@ class SignIn extends React.Component {
     }
 
     handleSubmit = (values) => {
-        this.props.signinTrigger({ email: values.email })
+        this.props.signinTrigger({ email: values.email, password: values.password })
     }
 
 
@@ -57,6 +57,8 @@ class SignIn extends React.Component {
                                         <img className="mb-4" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" alt="" width="72" height="72" />
                                         <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
                                     </div>
+
+                                    {this.state.error}
 
                                     <div className="form-group">
                                         <label htmlFor="email">Email address</label>

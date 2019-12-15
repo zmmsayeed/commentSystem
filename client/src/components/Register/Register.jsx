@@ -1,4 +1,5 @@
 import React from 'react';
+import bcrypt from 'bcryptjs'
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
@@ -11,12 +12,16 @@ import validate from './validation'
 
 import './Register.css';
 
+let dispatchHandler = {}
+
 class Register extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             error: ""
         }
+
+        dispatchHandler = this.props.registerUserTrigger
     }
 
     componentWillReceiveProps(props) {
@@ -38,12 +43,16 @@ class Register extends React.Component {
     }
 
     handleSubmit = (values) => {
-        console.log(values)
-        this.props.registerUserTrigger({
-            email: values.email,
-            password: values.password,
-            confirmPassword: values.password
-        })
+
+        let password = values.password;
+        bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
+                dispatchHandler({
+                    email: values.email,
+                    password: hash,
+                })
+            });
+        });
     }
 
     render() {
@@ -133,7 +142,7 @@ class Register extends React.Component {
                                             }}
                                         </Field>
                                     </div>
-                                    <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+                                    <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={submitting || !valid}>Register</button>
                                     <div className="text-center">
                                         <p className="mb-5 mt-5">
                                             Already a User?
@@ -158,6 +167,7 @@ const mapDispatchToProps = dispatch => {
         }
     };
 }
+
 Register = connect(
     (state, action) => (
         commentReducer(state, action)),
