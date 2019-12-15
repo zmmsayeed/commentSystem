@@ -44,6 +44,12 @@ const commentReducer = (state = {}, action) => {
         case 'POST_COMMENT_RESPONSE':
             return { ...newState, loading: false, isFetched: true, commentResponse: action.json, action: action.type }
 
+        case 'GET_COMMENTS':
+            return { ...newState, loading: true, isFetched: false }
+
+        case 'GET_COMMENTS_RESPONSE':
+            return { ...newState, loading: false, isFetched: true, comments: action.json, action: action.type }
+
         default:
             return newState
     }

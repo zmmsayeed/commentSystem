@@ -83,6 +83,19 @@ function* postComment(data) {
     yield put({ type: "POST_COMMENT_RESPONSE", json: json || [{ error: json }] });
 }
 
+function* getComments(data) {
+    const json = yield fetch('http://localhost:3001/comment/comment', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json());
+
+    yield put({ type: "GET_COMMENTS_RESPONSE", json: json || [{ error: json }] });
+}
+
 function* actionWatcher() {
     yield takeLatest('REGISTER_USER_TRIGGER', registerUser);
     yield takeLatest('SIGNIN_TRIGGER', signinUser);
@@ -90,6 +103,7 @@ function* actionWatcher() {
     yield takeLatest('GET_POSTS', getPosts);
     yield takeLatest('EDIT_POST_TRIGGER', editPost);
     yield takeLatest('POST_COMMENT', postComment);
+    yield takeLatest('GET_COMMENTS', getComments);
 }
 
 export default function* rootSaga() {

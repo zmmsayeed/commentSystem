@@ -38,6 +38,10 @@
     cursor: pointer;
 }
 
+.click:hover {
+    color: #005ef5;
+}
+
 /* Comment Section Styling */
 .comment-box-wrapper{
     display:flex; 

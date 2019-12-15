@@ -76,4 +76,16 @@ export const postCommentResponse = (data) => {
     })
 }
 
+export const getComments = (data) => {
+    return ({
+        type: 'GET_COMMENTS', data
+    })
+}
+
+export const getCommentsResponse = (data) => {
+    return ({
+        type: 'GET_COMMENTS_RESPONSE', data
+    })
+}
+
 

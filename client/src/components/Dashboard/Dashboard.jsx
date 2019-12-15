@@ -5,7 +5,7 @@ import { Form, Field } from 'react-final-form';
 import validate from './validation'
 
 import commentReducer from '../../reducers/commentReducer';
-import { logoutTrigger, postPost, getPosts, editPostTrigger } from '../../actions/index';
+import { logoutTrigger, postPost, getPosts, editPostTrigger, postComment, getComments } from '../../actions/index';
 
 import './Dashboard.css'
 
@@ -26,15 +26,32 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        this.props.getPosts()
+        this.props.getPosts();
+        this.props.getComments();
     }
 
     componentWillReceiveProps(props) {
         if (props.commentReducer.isFetched) {
             switch (props.commentReducer.action) {
+                case 'POST_POST_RESPONSE':
+                    if (props.commentReducer.postResponse.success) {
+                        this.props.getPosts()
+                    }
+                    break;
+                case 'POST_COMMENT_RESPONSE':
+                    if (props.commentReducer.commentResponse.success) {
+                        this.props.getComments()
+                    }
+                    break;
                 case 'GET_POSTS_RESPONSE':
                     if (props.commentReducer.posts && props.commentReducer.posts.success) {
                         this.setState({ posts: props.commentReducer.posts.data })
+                    }
+                    break;
+
+                case 'GET_COMMENTS_RESPONSE':
+                    if (props.commentReducer.comments && props.commentReducer.comments.success) {
+                        this.setState({ allComments: props.commentReducer.comments.data })
                     }
                     break;
 
@@ -44,6 +61,7 @@ class Dashboard extends Component {
                             this.props.getPosts();
                         })
                     }
+                    break;
 
                 default:
                     break;
@@ -78,6 +96,15 @@ class Dashboard extends Component {
                     fieldData: {
                         comment: values.comment
                     }
+                })
+                break;
+
+            case 'Reply':
+                this.props.postComment({
+                    commentBody: values.comment,
+                    commentedById: this.state.userId,
+                    commentedByEmail: this.state.userEmail,
+                    postId: this.state.editPost._id,
                 })
                 break;
 
@@ -157,7 +184,7 @@ class Dashboard extends Component {
                                             <div className="comment-content">
                                                 <div className="commenter-head">
                                                     <span className="commenter-name">
-                                                        <a href="">{post.commentedByEmail}</a>
+                                                        <span>{post.commentedByEmail}</span>
                                                     </span>
                                                     <span className="comment-date">
                                                         <i className="far fa-clock"></i>2 days ago
@@ -166,19 +193,67 @@ class Dashboard extends Component {
                                                 <div className="comment-body">
                                                     <span className="comment">{post.comment}</span>
                                                 </div>
+
                                                 <div className="comment-footer">
                                                     <span className="comment-likes">
-                                                        <span href="" className="comment-action active" onClick={() => this.onClick({ buttonText: "Reply", textareaText: "", editPost: post })} >
+                                                        <span href="" className="comment-action active click" onClick={() => this.onClick({ buttonText: "Reply", textareaText: "", editPost: post })} >
                                                             <i className="fas fa-reply"></i> Reply</span>
                                                     </span>
-                                                    <span className="comment-reply">
-                                                        <span href="" className="comment-action" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
-                                                            <i className="fas fa-edit"></i> Edit
-                                                        </span>
-                                                    </span>
+                                                    {
+                                                        (post.commentedById === this.state.userId)
+                                                            ? (<span className="comment-reply">
+                                                                <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
+                                                                    <i className="fas fa-edit"></i> Edit
+                                                                </span>
+                                                            </span>)
+                                                            : ""
+                                                    }
                                                 </div>
+
                                             </div>
                                         </div>
+                                        {
+                                            Array.isArray(this.state.allComments)
+                                                ? this.state.allComments.filter(comment => {
+                                                    return comment.postId === post._id
+                                                }).map(com => {
+                                                    return (
+                                                        <div className="nested-comments">
+                                                            <div className="comment-box-wrapper">
+                                                                <div className="comment-box">
+                                                                    <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
+                                                                    <div className="comment-content">
+                                                                        <div className="commenter-head">
+                                                                            <span className="commenter-name">
+                                                                                <span>{com.commentedByEmail}</span>
+                                                                            </span>
+                                                                            <span className="comment-date">
+                                                                                <i className="far fa-clock"></i>2 days ago
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="comment-body">
+                                                                            <span className="comment">{com.commentBody}</span>
+                                                                        </div>
+                                                                        <div className="comment-footer">
+                                                                            {
+                                                                                (com.commentedById === this.state.userId)
+                                                                                    ? (<span className="comment-reply">
+                                                                                        <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
+                                                                                            <i className="fas fa-edit"></i> Edit
+                                                                                        </span>
+                                                                                    </span>)
+                                                                                    : ""
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                                : ""
+                                        }
                                         {/* <div className="nested-comments">
 
                                             <div className="comment-box-wrapper">
@@ -271,6 +346,12 @@ const mapDispatchToProps = dispatch => {
         },
         editPostTrigger: (data) => {
             return dispatch(editPostTrigger(data))
+        },
+        postComment: (data) => {
+            return dispatch(postComment(data))
+        },
+        getComments: (data) => {
+            return dispatch(getComments(data))
         },
     };
 }
