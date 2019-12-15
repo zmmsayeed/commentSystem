@@ -94,7 +94,8 @@ router.get('/post', async (req, res) => {
 router.put('/update', async (req, res) => {
     try {
         let updatedData = await db.getDb().collection('posts').findOneAndUpdate({ _id: req.body.id }, { $set: req.body.fieldData })
-        if (updatedData) {
+        console.log(updatedData)
+        if (updatedData.value !== null) {
             res.send({
                 success: true,
                 status: 200,
@@ -102,6 +103,7 @@ router.put('/update', async (req, res) => {
             })
         }
         else {
+            console.log(req.body.id)
             let updatedData1 = await db.getDb().collection('comments').findOneAndUpdate({ _id: req.body.id }, { $set: req.body.fieldData })
             res.send({
                 success: true,

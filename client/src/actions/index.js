@@ -88,4 +88,16 @@ export const getCommentsResponse = (data) => {
     })
 }
 
+export const editCommentTrigger = (data) => {
+    return ({
+        type: 'EDIT_COMMENT_TRIGGER', data
+    })
+}
+
+export const editCommentResponse = (data) => {
+    return ({
+        type: 'EDIT_COMMENT_RESPONSE', data
+    })
+}
+
 

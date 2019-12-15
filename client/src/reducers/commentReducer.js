@@ -50,6 +50,12 @@ const commentReducer = (state = {}, action) => {
         case 'GET_COMMENTS_RESPONSE':
             return { ...newState, loading: false, isFetched: true, comments: action.json, action: action.type }
 
+        case 'EDIT_COMMENT_TRIGGER':
+            return { ...newState, loading: true, isFetched: false }
+
+        case 'EDIT_COMMENT_RESPONSE':
+            return { ...newState, loading: false, isFetched: true, resp: action.json, action: action.type }
+
         default:
             return newState
     }
