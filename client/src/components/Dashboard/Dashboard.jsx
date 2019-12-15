@@ -150,16 +150,25 @@ class Dashboard extends Component {
                     </div>
                 </div>
 
-                <div>
-                    <p>
+                <div className="row">
+                    <div className="col-8 col-md8">
+                        <p>
+                            {
+                                this.state.buttonText === "Post"
+                                    ? "You are writing a new post:"
+                                    : this.state.buttonText === "Update"
+                                        ? "You are editing a post:"
+                                        : "You are replying to post:"
+                            }
+                        </p>
+                    </div>
+                    <div className="col-4 col-md-4">
                         {
-                            this.state.buttonText === "Post"
-                                ? "You are writing a new post:"
-                                : this.state.buttonText === "Update"
-                                    ? "You are editing a post:"
-                                    : "You are replying to post:"
+                            (this.state.buttonText === "Update" || this.state.buttonText === "Reply" || this.state.buttonText === "Update Comment")
+                                ? <p className="click" onClick={() => this.onClick({ buttonText: "Post", textareaText: "", editPost: "" })}>Cancel</p>
+                                : ""
                         }
-                    </p>
+                    </div>
                 </div>
 
                 {/* Post Box Code */}
