@@ -205,7 +205,7 @@ class Dashboard extends Component {
                                     </div>
                                     <div className="col-3 col-md-3">
                                         <div className="rightDiv">
-                                            <button type="submit" className="btn btn-warning">{this.state.buttonText}</button>
+                                            <button type="submit" className="btn btn-warning" disabled={submitting || !valid}>{this.state.buttonText}</button>
                                         </div>
                                     </div>
                                 </div>
