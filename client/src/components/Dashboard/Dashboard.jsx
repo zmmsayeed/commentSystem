@@ -269,7 +269,6 @@ class Dashboard extends Component {
                                                             <div className="nested-comments" key={com._id}>
                                                                 <div className="comment-box-wrapper">
                                                                     <div className="comment-box">
-                                                                        {/* <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" /> */}
                                                                         <img src={ "/alphabets/" + com.commentedByEmail.charAt(0).toLowerCase() + ".png" } className="commenter-image" alt="commenter_image" />
                                                                         <div className="comment-content">
                                                                             <div className="commenter-head">
