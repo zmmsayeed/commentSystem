@@ -7,15 +7,10 @@ import commentReducer from './reducers/commentReducer';
 import Main from './components/Main'
 
 class App extends React.Component {
-
-  renderMainRedirect = () => {
-    return <Main />
-  }
-
   render() {
     return (
       <div>
-        {this.renderMainRedirect()}
+        <Main />
       </div>
     )
   }
