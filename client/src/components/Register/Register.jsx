@@ -90,7 +90,7 @@ class Register extends React.Component {
                                                 return (
                                                     <>
                                                         <input {...input} type="email" placeholder={placeholder} className="form-control" />
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                        {showToolTip ? <small className="text-danger">{meta.error}</small> : ""}
                                                     </>
                                                 )
                                             }}
@@ -113,7 +113,7 @@ class Register extends React.Component {
                                                 return (
                                                     <>
                                                         <input {...input} type="password" placeholder={placeholder} className="form-control" />
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                        {showToolTip ? <small className="text-danger">{meta.error}</small> : ""}
                                                     </>
                                                 )
                                             }}
@@ -136,7 +136,7 @@ class Register extends React.Component {
                                                 return (
                                                     <>
                                                         <input {...input} type="password" placeholder={placeholder} className="form-control" />
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                        {showToolTip ? <small className="text-danger">{meta.error}</small> : ""}
                                                     </>
                                                 )
                                             }}
@@ -146,7 +146,7 @@ class Register extends React.Component {
                                     <div className="text-center">
                                         <p className="mb-5 mt-5">
                                             Already a User?
-                                            <Link to="/singIn"> Sign In.</Link>
+                                            <Link to="/signIn"> Sign In.</Link>
                                         </p>
                                         <p className="mt-5 mb-3 text-muted">&copy; 2019-2020</p>
                                     </div>
