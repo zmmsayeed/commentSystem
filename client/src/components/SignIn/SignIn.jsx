@@ -77,7 +77,7 @@ class SignIn extends React.Component {
                                                 return (
                                                     <>
                                                         <input {...input} type="email" placeholder={placeholder} className="form-control" />
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                        {showToolTip ? <small className="text-danger">{meta.error}</small> : ""}
                                                     </>
                                                 )
                                             }}
@@ -100,7 +100,7 @@ class SignIn extends React.Component {
                                                 return (
                                                     <>
                                                         <input {...input} type="password" placeholder={placeholder} className="form-control" />
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
+                                                        {showToolTip ? <small className="text-danger">{meta.error}</small> : ""}
                                                     </>
                                                 )
                                             }}
