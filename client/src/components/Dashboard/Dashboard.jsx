@@ -2,13 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import moment from 'moment'
 
+// importing components
+import Navbar from '../Navbar';
+
+// importing final form and its validation file
 import { Form, Field } from 'react-final-form';
 import validate from './validation'
 
+// importing reducer and actions
 import commentReducer from '../../reducers/commentReducer';
 import { logoutTrigger, postPost, getPosts, editPostTrigger, postComment, getComments, editCommentTrigger } from '../../actions/index';
 
-import './Dashboard.css'
+// importing stylesheet
+import './Dashboard.css';
 
 class Dashboard extends Component {
 
@@ -139,172 +145,172 @@ class Dashboard extends Component {
             this.props.history.push('/signIn')
         }
         return (
-            <div className="container mt-3">
+            <>
+                <Navbar user={this.state.userEmail} />
+                <div className="container mt-3">
 
-                <div className="row mt-2">
-                    <div className="col-8 col-md-8">
-                        <p><b>Welcome, {this.state.userEmail}</b></p>
-                    </div>
-                    <div className="col-4 col-md-4 text-right">
-                        <p className="click" onClick={this.logOut}>Log Out</p>
-                    </div>
-                </div>
 
-                <div className="row">
-                    <div className="col-8 col-md8">
-                        <p>
+                    <div className="row">
+                        <div className="col-8 col-md8">
+                            <p>
+                                {
+                                    this.state.buttonText === "Post"
+                                        ? "You are writing a new post:"
+                                        : this.state.buttonText === "Update"
+                                            ? "You are editing a post:"
+                                            : "You are replying to post:"
+                                }
+                            </p>
+                        </div>
+                        <div className="col-4 col-md-4">
                             {
-                                this.state.buttonText === "Post"
-                                    ? "You are writing a new post:"
-                                    : this.state.buttonText === "Update"
-                                        ? "You are editing a post:"
-                                        : "You are replying to post:"
+                                (this.state.buttonText === "Update" || this.state.buttonText === "Reply" || this.state.buttonText === "Update Comment")
+                                    ? <p className="click" onClick={() => this.onClick({ buttonText: "Post", textareaText: "", editPost: "" })}>Cancel</p>
+                                    : ""
                             }
-                        </p>
+                        </div>
                     </div>
-                    <div className="col-4 col-md-4">
-                        {
-                            (this.state.buttonText === "Update" || this.state.buttonText === "Reply" || this.state.buttonText === "Update Comment")
-                                ? <p className="click" onClick={() => this.onClick({ buttonText: "Post", textareaText: "", editPost: "" })}>Cancel</p>
-                                : ""
-                        }
-                    </div>
-                </div>
 
-                {/* Post Box Code */}
-                <Form onSubmit={this.handleSubmit}
-                    validate={(values) => { return validate(values) }}
-                    initialValues={{ comment: this.state.textareaText }}
-                    render={({ handleSubmit, form, submitting, pristine, valid }) => (
+                    {/* Post Box Code */}
+                    <Form onSubmit={this.handleSubmit}
+                        validate={(values) => { return validate(values) }}
+                        initialValues={{ comment: this.state.textareaText }}
+                        render={({ handleSubmit, form, submitting, pristine, valid }) => (
 
-                        <form onSubmit={handleSubmit}>
-                            <div className="postBox">
-                                <div className="row">
-                                    <div className="col-9 col-md-9">
-                                        <Field
-                                            name="comment"
-                                            placeholder='Start a conversation!'
-                                        >
-                                            {({ input, meta, placeholder }) => {
-                                                let showToolTip = false
-                                                if (meta.error && meta.visited && !meta.active) {
-                                                    showToolTip = true
-                                                }
-                                                else {
-                                                    showToolTip = false
-                                                }
-                                                return (
-                                                    <>
-                                                        <textarea {...input} className="customTextarea" placeholder={placeholder}
-                                                            ref={(ip) => this.myInp = ip} required></textarea>
-                                                        {showToolTip ? <small>{meta.error}</small> : ""}
-                                                    </>
-                                                )
-                                            }}
-                                        </Field>
-                                    </div>
-                                    <div className="col-3 col-md-3">
-                                        <div className="rightDiv">
-                                            <button type="submit" className="btn btn-warning" disabled={submitting || !valid}>{this.state.buttonText}</button>
+                            <form onSubmit={handleSubmit}>
+                                <div className="postBox">
+                                    <div className="row">
+                                        <div className="col-9 col-md-9">
+                                            <Field
+                                                name="comment"
+                                                placeholder='Start a conversation!'
+                                            >
+                                                {({ input, meta, placeholder }) => {
+                                                    let showToolTip = false
+                                                    if (meta.error && meta.visited && !meta.active) {
+                                                        showToolTip = true
+                                                    }
+                                                    else {
+                                                        showToolTip = false
+                                                    }
+                                                    return (
+                                                        <>
+                                                            <textarea {...input} className="customTextarea" placeholder={placeholder}
+                                                                ref={(ip) => this.myInp = ip} required></textarea>
+                                                            {
+                                                                showToolTip
+                                                                    ? <small className="text-danger">{meta.error}</small>
+                                                                    : ""
+                                                            }
+                                                        </>
+                                                    )
+                                                }}
+                                            </Field>
+                                        </div>
+                                        <div className="col-3 col-md-3">
+                                            <div className="rightDiv">
+                                                <button type="submit" className="btn btn-warning" disabled={submitting || !valid}>{this.state.buttonText}</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    )}
-                />
-                {/* Post Box Code */}
+                            </form>
+                        )}
+                    />
+                    {/* Post Box Code */}
 
-                {/* Comment Section Code */}
-                <div className="row mt-3">
-                    <div className="col-md-12 col-12">
+                    {/* Comment Section Code */}
+                    <div className="row mt-5">
+                        <div className="col-md-12 col-12">
 
-                        {
-                            Array.isArray(this.state.posts)
-                                ? this.state.posts.map((post) =>
-                                    <div className="comment-box-wrapper" key={post._id}>
-                                        <div className="comment-box">
-                                            <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
-                                            <div className="comment-content">
-                                                <div className="commenter-head">
-                                                    <span className="commenter-name">
-                                                        <span>{post.commentedByEmail}</span>
-                                                    </span>
-                                                    <span className="comment-date">
-                                                        <i className="far fa-clock"></i>{moment(post.timestamp).format("MMM DD, YYYY (hh:mm A)")}
-                                                    </span>
-                                                </div>
-                                                <div className="comment-body">
-                                                    <span className="comment">{post.comment}</span>
-                                                </div>
+                            {
+                                Array.isArray(this.state.posts)
+                                    ? this.state.posts.map((post) =>
+                                        <div className="comment-box-wrapper" key={post._id}>
+                                            <div className="comment-box">
+                                            <img src={ "/alphabets/" + post.commentedByEmail.charAt(0).toLowerCase() + ".png" } className="commenter-image" alt="commenter_image" />
+                                                <div className="comment-content">
+                                                    <div className="commenter-head">
+                                                        <span className="commenter-name">
+                                                            <span>{post.commentedByEmail}</span>
+                                                        </span>
+                                                        <span className="comment-date">
+                                                            <i className="far fa-clock"></i>{moment(post.timestamp).format("MMM DD, YYYY (hh:mm A)")}
+                                                        </span>
+                                                    </div>
+                                                    <div className="comment-body">
+                                                        <span className="comment">{post.comment}</span>
+                                                    </div>
 
-                                                <div className="comment-footer">
-                                                    <span className="comment-likes">
-                                                        <span href="" className="comment-action active click" onClick={() => this.onClick({ buttonText: "Reply", textareaText: "", editPost: post })} >
-                                                            <i className="fas fa-reply"></i> Reply</span>
-                                                    </span>
-                                                    {
-                                                        (post.commentedById === this.state.userId)
-                                                            ? (<span className="comment-reply">
-                                                                <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
-                                                                    <i className="fas fa-edit"></i> Edit
+                                                    <div className="comment-footer">
+                                                        <span className="comment-likes">
+                                                            <span href="" className="comment-action active click" onClick={() => this.onClick({ buttonText: "Reply", textareaText: "", editPost: post })} >
+                                                                <i className="fas fa-reply"></i> Reply</span>
+                                                        </span>
+                                                        {
+                                                            (post.commentedById === this.state.userId)
+                                                                ? (<span className="comment-reply">
+                                                                    <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
+                                                                        <i className="fas fa-edit"></i> Edit
                                                                 </span>
-                                                            </span>)
-                                                            : ""
-                                                    }
+                                                                </span>)
+                                                                : ""
+                                                        }
+                                                    </div>
+
                                                 </div>
-
                                             </div>
-                                        </div>
-                                        {
-                                            Array.isArray(this.state.allComments)
-                                                ? this.state.allComments.filter(comment => {
-                                                    return comment.postId === post._id
-                                                }).map(com => {
-                                                    return (
-                                                        <div className="nested-comments" key={com._id}>
-                                                            <div className="comment-box-wrapper">
-                                                                <div className="comment-box">
-                                                                    <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" />
-                                                                    <div className="comment-content">
-                                                                        <div className="commenter-head">
-                                                                            <span className="commenter-name">
-                                                                                <span>{com.commentedByEmail}</span>
-                                                                            </span>
-                                                                            <span className="comment-date">
-                                                                                <i className="far fa-clock"></i>{moment(com.timestamp).format("MMM DD, YYYY (hh:mm A)")}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className="comment-body">
-                                                                            <span className="comment">{com.commentBody}</span>
-                                                                        </div>
-                                                                        <div className="comment-footer">
-                                                                            {
-                                                                                (com.commentedById === this.state.userId)
-                                                                                    ? (<span className="comment-reply">
-                                                                                        <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update Comment", textareaText: com.commentBody, editPost: com })}>
-                                                                                            <i className="fas fa-edit"></i> Edit
+                                            {
+                                                Array.isArray(this.state.allComments)
+                                                    ? this.state.allComments.filter(comment => {
+                                                        return comment.postId === post._id
+                                                    }).map(com => {
+                                                        return (
+                                                            <div className="nested-comments" key={com._id}>
+                                                                <div className="comment-box-wrapper">
+                                                                    <div className="comment-box">
+                                                                        {/* <img src="https://previews.123rf.com/images/malydesigner/malydesigner1410/malydesigner141000056/32278325-grunge-gray-background-texture.jpg" className="commenter-image" alt="commenter_image" /> */}
+                                                                        <img src={ "/alphabets/" + com.commentedByEmail.charAt(0).toLowerCase() + ".png" } className="commenter-image" alt="commenter_image" />
+                                                                        <div className="comment-content">
+                                                                            <div className="commenter-head">
+                                                                                <span className="commenter-name">
+                                                                                    <span>{com.commentedByEmail}</span>
+                                                                                </span>
+                                                                                <span className="comment-date">
+                                                                                    <i className="far fa-clock"></i>{moment(com.timestamp).format("MMM DD, YYYY (hh:mm A)")}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="comment-body">
+                                                                                <span className="comment">{com.commentBody}</span>
+                                                                            </div>
+                                                                            <div className="comment-footer">
+                                                                                {
+                                                                                    (com.commentedById === this.state.userId)
+                                                                                        ? (<span className="comment-reply">
+                                                                                            <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update Comment", textareaText: com.commentBody, editPost: com })}>
+                                                                                                <i className="fas fa-edit"></i> Edit
                                                                                         </span>
-                                                                                    </span>)
-                                                                                    : ""
-                                                                            }
+                                                                                        </span>)
+                                                                                        : ""
+                                                                                }
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
 
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )
-                                                })
-                                                : ""
-                                        }
-                                    </div>
-                                )
-                                : ""
-                        }
+                                                        )
+                                                    })
+                                                    : ""
+                                            }
+                                        </div>
+                                    )
+                                    : ""
+                            }
+                        </div>
                     </div>
-                </div>
-            </div >
+                </div >
+            </>
         )
     }
 }
