@@ -3,13 +3,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 
-import commentReducer from '../../reducers/commentReducer';
 import { signinTrigger } from '../../actions/index';
 
 import { Form, Field } from 'react-final-form';
 import validate from './validation'
 
+// importing stylesheet
 import './SignIn.css';
+
+let self;
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -18,23 +20,8 @@ class SignIn extends React.Component {
         this.state = {
             error: ""
         }
-    }
-
-    componentWillReceiveProps(props) {
-        if (props.commentReducer.isFetched) {
-            switch (props.commentReducer.action) {
-                case 'SIGNIN_RESPONSE':
-                    if (props.commentReducer.response.success && props.commentReducer.userLoggedIn) {
-                        this.props.history.push('/dashboard')
-                    }
-                    else {
-                        this.setState({ error: props.commentReducer.response.message })
-                    }
-                    break;
-                default:
-                    break
-            }
-        }
+        
+        self = this;
     }
 
     handleSubmit = (values) => {
@@ -124,6 +111,27 @@ class SignIn extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+    if (state.commentReducer.isFetched) {
+        switch (state.commentReducer.action) {
+            case 'SIGNIN_RESPONSE':
+                if (state.commentReducer.response.success && state.commentReducer.userLoggedIn) {
+                    self.props.history.push('/dashboard')
+                }
+                else {
+                    self.setState({ error: state.commentReducer.response.message })
+                }
+                break;
+            default:
+                break
+        }
+    }
+    return {
+        state
+    };
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         signinTrigger: (data) => {
@@ -131,11 +139,5 @@ const mapDispatchToProps = dispatch => {
         }
     };
 }
-SignIn = connect(
-    (state, action) => (
-        commentReducer(state, action)),
-    mapDispatchToProps,
-)(SignIn);
 
-
-export default SignIn;
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
