@@ -105,6 +105,7 @@ class Dashboard extends Component {
                     commentedByEmail: this.state.userEmail,
                     repliedTo: this.state.repliedTo,
                 })
+                window.setFormValue('comment', '')
                 break;
 
             case 'Update':
@@ -114,6 +115,7 @@ class Dashboard extends Component {
                         comment: values.comment
                     }
                 })
+                window.setFormValue('comment', '')
                 break;
 
             case 'Reply':
@@ -123,6 +125,7 @@ class Dashboard extends Component {
                     commentedByEmail: this.state.userEmail,
                     postId: this.state.editPost._id,
                 })
+                window.setFormValue('comment', '')
                 break;
 
             case "Update Comment":
@@ -132,6 +135,7 @@ class Dashboard extends Component {
                         commentBody: values.comment
                     }
                 })
+                window.setFormValue('comment', '')
                 break;
 
             default:
@@ -165,7 +169,7 @@ class Dashboard extends Component {
                         <div className="col-4 col-md-4">
                             {
                                 (this.state.buttonText === "Update" || this.state.buttonText === "Reply" || this.state.buttonText === "Update Comment")
-                                    ? <p className="click" onClick={() => this.onClick({ buttonText: "Post", textareaText: "", editPost: "" })}>Cancel</p>
+                                    ? <p className="click" onClick={() => this.onClick({ buttonText: "Post", editPost: "" })}>Cancel</p>
                                     : ""
                             }
                         </div>
@@ -173,49 +177,54 @@ class Dashboard extends Component {
 
                     {/* Post Box Code */}
                     <Form onSubmit={this.handleSubmit}
+                        mutators={{
+                            setValue: ([field, value], state, { changeValue }) => {
+                                changeValue(state, field, () => value)
+                            }
+                        }}
                         validate={(values) => { return validate(values) }}
-                        initialValues={{ comment: this.state.textareaText }}
-                        render={({ handleSubmit, form, submitting, pristine, valid }) => (
+                        render={({ handleSubmit, form, submitting, pristine, valid }) => {
 
-                            <form onSubmit={handleSubmit}>
-                                <div className="postBox">
-                                    <div className="row">
-                                        <div className="col-9 col-md-9">
-                                            <Field
-                                                name="comment"
-                                                placeholder='Start a conversation!'
-                                            >
-                                                {({ input, meta, placeholder }) => {
-                                                    let showToolTip = false
-                                                    if (meta.error && meta.visited && !meta.active) {
-                                                        showToolTip = true
-                                                    }
-                                                    else {
-                                                        showToolTip = false
-                                                    }
-                                                    return (
-                                                        <>
-                                                            <textarea {...input} className="customTextarea" placeholder={placeholder}
-                                                                ref={(ip) => this.myInp = ip} required></textarea>
-                                                            {
-                                                                showToolTip
-                                                                    ? <small className="text-danger">{meta.error}</small>
-                                                                    : ""
-                                                            }
-                                                        </>
-                                                    )
-                                                }}
-                                            </Field>
-                                        </div>
-                                        <div className="col-3 col-md-3">
-                                            <div className="rightDiv">
-                                                <button type="submit" className="btn btn-warning" disabled={submitting || !valid}>{this.state.buttonText}</button>
+                            if (!window.setFormValue) window.setFormValue = form.mutators.setValue;
+
+                            return (
+
+                                <form onSubmit={handleSubmit}>
+                                    <div className="postBox">
+                                        <div className="row">
+                                            <div className="col-9 col-md-9">
+                                                <Field
+                                                    name="comment"
+                                                    placeholder='Start a conversation!'
+                                                >
+                                                    {({ input, meta, placeholder }) => {
+                                                        let showToolTip = false;
+                                                        if (meta.error && meta.visited && !meta.active) showToolTip = true
+                                                        else showToolTip = false
+                                                        return (
+                                                            <>
+                                                                <textarea {...input} className="customTextarea" placeholder={placeholder}
+                                                                    ref={(ip) => this.myInp = ip} required></textarea>
+                                                                {
+                                                                    showToolTip
+                                                                        ? <small className="text-danger">{meta.error}</small>
+                                                                        : ""
+                                                                }
+                                                            </>
+                                                        )
+                                                    }}
+                                                </Field>
+                                            </div>
+                                            <div className="col-3 col-md-3">
+                                                <div className="rightDiv">
+                                                    <button type="submit" className="btn btn-warning" disabled={submitting || !valid}>{this.state.buttonText}</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
-                        )}
+                                </form>
+                            )
+                        }}
                     />
                     {/* Post Box Code */}
 
@@ -228,7 +237,7 @@ class Dashboard extends Component {
                                     ? this.state.posts.map((post) =>
                                         <div className="comment-box-wrapper" key={post._id}>
                                             <div className="comment-box">
-                                            <img src={ "/alphabets/" + post.commentedByEmail.charAt(0).toLowerCase() + ".png" } className="commenter-image" alt="commenter_image" />
+                                                <img src={"/alphabets/" + post.commentedByEmail.charAt(0).toLowerCase() + ".png"} className="commenter-image" alt="commenter_image" />
                                                 <div className="comment-content">
                                                     <div className="commenter-head">
                                                         <span className="commenter-name">
@@ -244,13 +253,18 @@ class Dashboard extends Component {
 
                                                     <div className="comment-footer">
                                                         <span className="comment-likes">
-                                                            <span href="" className="comment-action active click" onClick={() => this.onClick({ buttonText: "Reply", textareaText: "", editPost: post })} >
+                                                            <span href="" className="comment-action active click" onClick={() => this.onClick({ buttonText: "Reply", editPost: post })} >
                                                                 <i className="fas fa-reply"></i> Reply</span>
                                                         </span>
                                                         {
                                                             (post.commentedById === this.state.userId)
                                                                 ? (<span className="comment-reply">
-                                                                    <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update", textareaText: post.comment, editPost: post })}>
+                                                                    <span href="" className="comment-action click" onClick={() => {
+                                                                        window.setFormValue('comment', post.comment)
+                                                                        this.onClick({
+                                                                            buttonText: "Update", editPost: post
+                                                                        })
+                                                                    }}>
                                                                         <i className="fas fa-edit"></i> Edit
                                                                 </span>
                                                                 </span>)
@@ -269,7 +283,7 @@ class Dashboard extends Component {
                                                             <div className="nested-comments" key={com._id}>
                                                                 <div className="comment-box-wrapper">
                                                                     <div className="comment-box">
-                                                                        <img src={ "/alphabets/" + com.commentedByEmail.charAt(0).toLowerCase() + ".png" } className="commenter-image" alt="commenter_image" />
+                                                                        <img src={"/alphabets/" + com.commentedByEmail.charAt(0).toLowerCase() + ".png"} className="commenter-image" alt="commenter_image" />
                                                                         <div className="comment-content">
                                                                             <div className="commenter-head">
                                                                                 <span className="commenter-name">
@@ -286,7 +300,9 @@ class Dashboard extends Component {
                                                                                 {
                                                                                     (com.commentedById === this.state.userId)
                                                                                         ? (<span className="comment-reply">
-                                                                                            <span href="" className="comment-action click" onClick={() => this.onClick({ buttonText: "Update Comment", textareaText: com.commentBody, editPost: com })}>
+                                                                                            <span href="" className="comment-action click" onClick={() => {
+                                                                                                window.setFormValue('comment', com.commentBody)
+                                                                                                this.onClick({ buttonText: "Update Comment", editPost: com })}}>
                                                                                                 <i className="fas fa-edit"></i> Edit
                                                                                         </span>
                                                                                         </span>)
